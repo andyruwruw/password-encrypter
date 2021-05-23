@@ -4,103 +4,42 @@
       {{ messages[messageIndex] }}
     </span>
 
-    <span :class="$style.subtitle">
-      click one of these
-    </span>
-
-    <div
-      class="d-flex align-center"
-      :class="$style['button-wrapper']">
-      <v-btn
-        color="#EE4540"
-        :dark="method == 0 ? true : false"
-        :outlined="method == 0 ? false : true"
-        depressed
-        x-small
-        @click="changeMethod(0)">
-        {{ buttons[buttonIndex][0] }}
-      </v-btn>
-
-      <v-btn
-        color="#EE4540"
-        :dark="method == 1 ? true : false"
-        :outlined="method == 1 ? false : true"
-        depressed
-        x-small
-        @click="changeMethod(1)">
-        {{ buttons[buttonIndex][1] }}
-      </v-btn>
-
-      <v-btn
-        color="#EE4540"
-        :dark="method == 2 ? true : false"
-        :outlined="method == 2 ? false : true"
-        depressed
-        x-small
-        @click="changeMethod(2)">
-        {{ buttons[buttonIndex][2] }}
-      </v-btn>
-    </div>
-
-    <span :class="$style.subtitle">
-      solve your own puzzle
-    </span>
-
     <v-text-field
-      v-model="base"
+      v-model="key"
       color="#EE4540"
       autocomplete="off"
       aria-autocomplete="off"
-      hide-details
-      dense />
-
-    <span :class="$style.subtitle">
-      season generously
-    </span>
+      dense
+      dark
+      hide-details />
 
     <v-text-field
-      v-model="salt"
+      v-model="origin"
       color="#EE4540"
       autocomplete="off"
       aria-autocomplete="off"
-      hide-details
-      dense />
-
-    <span :class="$style.subtitle">
-      name a number
-    </span>
+      dense
+      dark
+      hide-details />
 
     <v-text-field
       v-model="number"
       color="#EE4540"
       autocomplete="off"
       aria-autocomplete="off"
-      hide-details
-      dense />
-
-    <span :class="$style.subtitle">
-      how many is too many
-    </span>
+      type="number"
+      dense
+      dark
+      hide-details />
 
     <v-text-field
-      v-model="additive"
+      v-model="skeletonKey"
       color="#EE4540"
       autocomplete="off"
       aria-autocomplete="off"
-      hide-details
-      dense />
-
-    <span :class="$style.subtitle">
-      say the magic word
-    </span>
-
-    <v-text-field
-      v-model="key"
-      color="#EE4540"
-      autocomplete="off"
-      aria-autocomplete="off"
-      hide-details
-      dense />
+      dark
+      dense
+      hide-details />
 
     <span :class="$style.result">
       {{ result }}
@@ -110,7 +49,7 @@
 
 <script lang="ts">
 import Vue from 'vue';
-import bcrypt from 'bcrypt';
+import axios from 'axios';
 
 export default Vue.extend({
   name: 'Encrypter',
@@ -128,54 +67,23 @@ export default Vue.extend({
     ],
     messageIndex: 0,
 
-    method: -1,
-
-    buttons: [
-      [
-        'x',
-        'y',
-        'z',
-      ],
-      [
-        'pie',
-        'cake',
-        'jello',
-      ],
-      [
-        'jam',
-        'jelly',
-        'preserve',
-      ],
-    ],
-    buttonIndex: 0,
-
     key: '',
 
-    salt: '',
+    origin: '',
 
-    base: '',
+    number: -1,
 
-    number: '',
-
-    additive: '',
+    skeletonKey: '',
 
     result: '',
   }),
 
   watch: {
-    method() {
-      this.generatePassword();
-    },
-
     key() {
       this.generatePassword();
     },
 
-    salt() {
-      this.generatePassword();
-    },
-
-    base() {
+    origin() {
       this.generatePassword();
     },
 
@@ -183,133 +91,30 @@ export default Vue.extend({
       this.generatePassword();
     },
 
-    additive() {
+    skeletonKey() {
       this.generatePassword();
     },
   },
 
   created() {
     this.messageIndex = Math.floor(Math.random() * this.messages.length);
-    this.buttonIndex = Math.floor(Math.random() * this.buttons.length);
   },
 
   methods: {
-    changeMethod(num: number): void {
-      this.method = num;
-    },
+    async generatePassword(): Promise<void> {
+      if (this.key.length
+        && this.origin.length
+        && this.number !== -1
+        && this.skeletonKey.length) {
+        const response = await axios.put('/api/generate', {
+          key: this.key,
+          origin: this.origin,
+          number: this.number,
+          skeletonKey: this.skeletonKey,
+        });
 
-    generatePassword(): void {
-      if (this.method === -1
-        || !this.key
-        || !this.salt
-        || !this.base
-        || !this.number
-        || !this.additive) {
-        return;
+        this.result = response.data;
       }
-
-      if (this.method === 0) {
-        this.methodOne(
-          this.base,
-          this.salt,
-          this.key,
-          parseInt(this.number, 10),
-          parseInt(this.additive, 10),
-        );
-      } else if (this.method === 1) {
-        this.methodTwo(
-          this.base,
-          this.salt,
-          this.key,
-          parseInt(this.number, 10),
-          parseInt(this.additive, 10),
-        );
-      } else {
-        this.methodThree(
-          this.base,
-          this.salt,
-          this.key,
-          parseInt(this.number, 10),
-          parseInt(this.additive, 10),
-        );
-      }
-    },
-
-    async methodOne(
-      base: string,
-      salt: string,
-      key: string,
-      number: number,
-      additive: number,
-    ): Promise<void> {
-      const hashedKey = await bcrypt.hash(key, salt);
-
-      let alteredBase = '';
-
-      let i = 0;
-      while (i < base.length) {
-        if (number.toString().includes(i.toString())) {
-          alteredBase += base[i].toUpperCase();
-          alteredBase += (i + additive).toString();
-        } else {
-          alteredBase += base[i];
-        }
-        i += 1;
-      }
-      const result = await bcrypt.hash(`${hashedKey}${alteredBase}`, salt);
-
-      this.result = result;
-    },
-
-    async methodTwo(
-      base: string,
-      salt: string,
-      key: string,
-      number: number,
-      additive: number,
-    ): Promise<void> {
-      const hashedKey = await bcrypt.hash(key, base);
-
-      let alteredBase = '';
-
-      let i = 0;
-      while (i < base.length) {
-        if (number.toString().includes(i.toString())) {
-          alteredBase += (i - additive).toString();
-          alteredBase += base[i].toUpperCase();
-        } else {
-          alteredBase += base[i];
-        }
-        i += 1;
-      }
-      const result = await bcrypt.hash(`${alteredBase}${hashedKey}`, salt);
-
-      this.result = result;
-    },
-
-    async methodThree(
-      base: string,
-      salt: string,
-      key: string,
-      number: number,
-      additive: number,
-    ): Promise<void> {
-      const hashedKey = await bcrypt.hash(base, key);
-
-      let alteredBase = '';
-
-      let i = 0;
-      while (i < base.length) {
-        if (number.toString().includes(i.toString())) {
-          alteredBase += (i + additive * 2).toString();
-        } else {
-          alteredBase += base[i];
-        }
-        i += 1;
-      }
-      const result = await bcrypt.hash(`${alteredBase}${salt}`, hashedKey);
-
-      this.result = result;
     },
   },
 });
@@ -327,7 +132,7 @@ export default Vue.extend({
   text-align: center;
   font-family: 'Karla', sans-serif;
   letter-spacing: .05rem;
-  color: black;
+  color: #C3073F;
   animation: slide-up .3s ease 0s;
   font-size: 1.2rem;
 }
