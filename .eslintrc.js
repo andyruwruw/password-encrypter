@@ -15,5 +15,10 @@ module.exports = {
     'no-console': process.env.NODE_ENV === 'production' ? 'warn' : 'off',
     'no-debugger': process.env.NODE_ENV === 'production' ? 'warn' : 'off',
     'object-shorthand': 'off',
+    'no-bitwise': 'off',
+    'import/prefer-default-export': 'off',
+    'no-param-reassign': 'off',
+    'no-mixed-operators': 'off',
+    'prefer-destructuring': 'off',
   },
 };

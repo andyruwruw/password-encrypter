@@ -1,163 +1,140 @@
 <template>
   <div :class="$style.component">
-    <span :class="$style.title">
-      {{ messages[messageIndex] }}
-    </span>
+    <v-text-field
+      v-model="base"
+      color="black"
+      placeholder="Base"
+      prepend-inner-icon="mdi-magnify"
+      autocomplete="off"
+      dense
+      filled
+      rounded />
+
+    <v-text-field
+      v-model="secondary"
+      color="black"
+      placeholder="Home"
+      prepend-inner-icon="mdi-home"
+      autocomplete="off"
+      dense
+      filled
+      rounded />
+
+    <v-text-field
+      v-model="integer"
+      color="black"
+      placeholder="Number"
+      prepend-inner-icon="mdi-numeric-9-box-multiple-outline"
+      autocomplete="off"
+      dense
+      type="number"
+      filled
+      rounded />
 
     <v-text-field
       v-model="key"
-      color="#EE4540"
+      color="black"
+      placeholder="Skull Key"
+      prepend-inner-icon="mdi-key-variant"
       autocomplete="off"
-      aria-autocomplete="off"
       dense
-      dark
-      hide-details />
+      type="password"
+      filled
+      rounded />
 
-    <v-text-field
-      v-model="origin"
-      color="#EE4540"
-      autocomplete="off"
-      aria-autocomplete="off"
-      dense
+    <v-card
+      v-if="result"
+      :class="$style['result-card']"
       dark
-      hide-details />
+      outlined>
+      <span>
+        {{ result }}
+      </span>
 
-    <v-text-field
-      v-model="number"
-      color="#EE4540"
-      autocomplete="off"
-      aria-autocomplete="off"
-      type="number"
-      dense
-      dark
-      hide-details />
-
-    <v-text-field
-      v-model="skeletonKey"
-      color="#EE4540"
-      autocomplete="off"
-      aria-autocomplete="off"
-      dark
-      dense
-      hide-details />
-
-    <span :class="$style.result">
-      {{ result }}
-    </span>
+      <v-btn
+        :color="color"
+        dense
+        outlined
+        @click="copy">
+        Copy
+      </v-btn>
+    </v-card>
   </div>
 </template>
 
 <script lang="ts">
 import Vue from 'vue';
-import axios from 'axios';
+
+import { encrypt } from '@/helpers/encrypt';
 
 export default Vue.extend({
-  name: 'Encrypter',
-
+  name: 'Encryter',
   data: () => ({
-    messages: [
-      'de-anatomization procedure',
-      'devise countersign string',
-      'behold password',
-      'befuddle gobbledegook',
-      'garble and confuse',
-      'irreversible hocus-pocus',
-      'let me in',
-      'initiate bff secret handshake',
-    ],
-    messageIndex: 0,
-
+    base: '',
+    secondary: '',
+    integer: null,
     key: '',
-
-    origin: '',
-
-    number: -1,
-
-    skeletonKey: '',
-
     result: '',
+    color: 'white',
   }),
-
   watch: {
+    base() {
+      this.validate();
+    },
+    secondary() {
+      this.validate();
+    },
+    integer() {
+      this.validate();
+    },
     key() {
-      this.generatePassword();
-    },
-
-    origin() {
-      this.generatePassword();
-    },
-
-    number() {
-      this.generatePassword();
-    },
-
-    skeletonKey() {
-      this.generatePassword();
+      this.validate();
     },
   },
-
-  created() {
-    this.messageIndex = Math.floor(Math.random() * this.messages.length);
-  },
-
   methods: {
-    async generatePassword(): Promise<void> {
-      if (this.key.length
-        && this.origin.length
-        && this.number !== -1
-        && this.skeletonKey.length) {
-        const response = await axios.put('/api/generate', {
-          key: this.key,
-          origin: this.origin,
-          number: this.number,
-          skeletonKey: this.skeletonKey,
-        });
-
-        this.result = response.data;
+    validate() {
+      if (this.base && this.secondary && this.integer && this.key) {
+        this.generate();
+      } else {
+        this.result = '';
       }
+    },
+    generate() {
+      this.result = encrypt(
+        this.base.toLowerCase(),
+        this.secondary.toLowerCase(),
+        this.integer || 0,
+        this.key,
+      );
+    },
+    copy() {
+      if (!navigator.clipboard) {
+        return;
+      }
+      navigator.clipboard.writeText(this.result);
+      this.color = 'green';
     },
   },
 });
 </script>
 
-<style module>
+<style lang="scss" module>
 .component {
+  width: calc(100vw - 4rem);
+  max-width: 600px;
+}
+
+.result-card {
   align-items: center;
+  margin-top: 2rem;
+  padding: 1rem;
   display: flex;
-  flex-direction: column;
-  justify-content: center;
-}
+  justify-content: space-between;
 
-.title {
-  text-align: center;
-  font-family: 'Karla', sans-serif;
-  letter-spacing: .05rem;
-  color: #C3073F;
-  animation: slide-up .3s ease 0s;
-  font-size: 1.2rem;
-}
-
-.subtitle {
-  text-align: center;
-  font-family: 'Karla', sans-serif;
-  letter-spacing: .05rem;
-  color: #ee464091;
-  animation: slide-up .3s ease 0s;
-  margin: 2.5rem 0 0;
-}
-
-.button-wrapper {
-  margin-top: 1rem;
-}
-
-.button-wrapper button {
-  margin: 0 .8rem;
-}
-
-@keyframes slide-up {
-  from {
-    opacity: 0;
-    transform: translateY(-10px);
+  span {
+    color: rgb(255, 255, 255);
+    font-weight: 500;
+    letter-spacing: .05rem;
   }
 }
 </style>

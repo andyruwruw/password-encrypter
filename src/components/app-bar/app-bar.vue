@@ -1,7 +1,7 @@
 <template>
   <v-app-bar
     app
-    color="#1A1A1D"
+    color="#FFFFFF"
     dark
     flat>
     <div class="d-flex align-center">
@@ -25,6 +25,6 @@ export default Vue.extend({
 .title {
   font-family: 'Karla', sans-serif;
   letter-spacing: .05rem;
-  color: #C3073F;
+  color: #020202;
 }
 </style>
