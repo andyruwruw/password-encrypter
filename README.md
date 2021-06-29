@@ -9,7 +9,7 @@
 <p align="center">
   <a href="https://vercel.com/andyruwruw/password">Website</a>
   ·
-  <a href="https://github.com/andyruwruw/stardew-valley-water-bot/issues/new/choose">Submit an Issue</a>
+  <a href="https://github.com/andyruwruw/password-encrypter/issues/new">Submit an Issue</a>
 </p>
 
 # Overview
