@@ -122,6 +122,7 @@ export default Vue.extend({
 .component {
   width: calc(100vw - 4rem);
   max-width: 600px;
+  padding-bottom: 10rem;
 }
 
 .result-card {
