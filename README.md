@@ -14,11 +14,13 @@
 
 # Overview
 
-*password-encrypter* allows users to generate secure passwords utilizing SHA256.
+*password-encrypter* allows users to generate secure passwords utilizing [SHA256](https://en.wikipedia.org/wiki/SHA-2).
 
 I wanted a algorithmic way to store and generate my own passwords in a way that maintained security but increased memorability. Storing passwords in plaintext is never a good idea, but maintaining several secrets for each password ensure they'll stay safe.
 
-Passwords are made from a combination of 4 parameters:
+# How it Works
+
+Passwords are generated from a combination of four parameters:
 
 - *Base*
   - The *base* isn't stored verbatim, but instead a hint for either is stored in a way that only I can figure out their true value.
@@ -29,6 +31,23 @@ Passwords are made from a combination of 4 parameters:
 - *Skeleton Key*
   - I use a the same *skeleton key* for all my passwords, and have never written it down. It is the one part of this process that should stay completely secret.
 
-This website makes no server calls and is all done in browser. It's for personal use but feel free to fork and run your own version.
+# Usage
 
-I would not recommend using someone else's instance of this for your own password management. You should understand the code and have complete control over the process.
+
+This website makes no server calls and is all done in browser.
+
+It's for personal use but feel free to fork and run your own version. **I would not recommend using someone else's instance of this for your own password management**.
+
+I would also recommend changing some of the values around in the [config](https://github.com/andyruwruw/password-encrypter/blob/main/src/config/index.ts).
+
+You should understand the code and have complete control over the process.
+
+# Reversable Encryption
+
+I needed to store some recovery codes, meaning I needed to add a reversable function. This functions in the same way as password generation.
+
+You provide the four parameters to generate the passcode, and the data as a string to be encrypted.
+
+The data will be signed with the passcode using [jsonwebtoken](https://www.npmjs.com/package/jsonwebtoken).
+
+You can record the returned encrypted token as plaintext and use it in combination with those same four parameters to decrypt it.
