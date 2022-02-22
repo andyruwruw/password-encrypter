@@ -7,7 +7,7 @@
 </h2>
 
 <p align="center">
-  <a href="https://vercel.com/andyruwruw/password">Website</a>
+  <a href="https://password-encrypter.vercel.app/">Website</a>
   ·
   <a href="https://github.com/andyruwruw/password-encrypter/issues/new/choose">Submit an Issue</a>
 </p>
