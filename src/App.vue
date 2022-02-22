@@ -6,10 +6,6 @@
       <div class="main">
         <graphic />
 
-        <h3>
-          Generate a Password
-        </h3>
-
         <encrypter />
       </div>
     </v-main>
@@ -17,14 +13,17 @@
 </template>
 
 <script lang="ts">
+// Packages
 import Vue from 'vue';
 
+// Local Imports
 import AppBar from './components/app-bar/app-bar.vue';
 import Graphic from './components/graphic/graphic.vue';
 import Encrypter from './components/encrypter/encrypter.vue';
 
 export default Vue.extend({
   name: 'App',
+
   components: {
     AppBar,
     Graphic,

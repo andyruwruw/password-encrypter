@@ -1,7 +1,7 @@
 <template>
   <v-app-bar
-    app
     color="#FFFFFF"
+    app
     dark
     flat>
     <div class="d-flex align-center">
@@ -9,11 +9,11 @@
         password-encrypter
       </span>
     </div>
-    <v-spacer></v-spacer>
   </v-app-bar>
 </template>
 
 <script lang="ts">
+// Packages
 import Vue from 'vue';
 
 export default Vue.extend({

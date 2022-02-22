@@ -1,46 +1,41 @@
+// Local Imports
 import {
-  DIGIT,
-  LOWERCASE_LETTER,
-  SPECIAL_CHARACTER,
-  UPPERCASE_LETTER,
-} from './constants';
+  REGEX_DIGIT,
+  REGEX_LOWERCASE_LETTER,
+  REGEX_SPECIAL_CHARACTER,
+  REGEX_UPPERCASE_LETTER,
+} from '../config';
 
 /**
- * Whether string has digits
+ * Whether string has digits.
  *
- * @param {string} string The string to test
- * @returns Whether it has digits
+ * @param {string} string The string to test.
+ * @returns {boolean} Whether it has digits.
  */
-export function hasDigits(string: string): boolean {
-  return DIGIT.test(string);
-}
+export const hasDigits = (string: string): boolean => REGEX_DIGIT.test(string);
 
 /**
- * Whether string has lowercase letters
+ * Whether string has lowercase letters.
  *
- * @param {string} string The string to test
- * @returns Whether it has lowercase letters
+ * @param {string} string The string to test.
+ * @returns {boolean} Whether it has lowercase letters.
  */
-export function hasLowercaseLetters(string: string): boolean {
-  return LOWERCASE_LETTER.test(string);
-}
+export const hasLowercaseLetters = (string: string): boolean => REGEX_LOWERCASE_LETTER.test(string);
 
 /**
- * Whether string has special characters
+ * Whether string has special characters.
  *
- * @param {string} string The string to test
- * @returns Whether it has special characters
+ * @param {string} string The string to test.
+ * @returns {boolean} Whether it has special characters.
  */
-export function hasSpecialCharacters(string: string): boolean {
-  return SPECIAL_CHARACTER.test(string);
-}
+export const hasSpecialCharacters = (string: string): boolean => (
+  REGEX_SPECIAL_CHARACTER.test(string)
+);
 
 /**
- * Whether string has uppercase letters
+ * Whether string has uppercase letters.
  *
- * @param {string} string The string to test
- * @returns Whether it has uppercase letters
+ * @param {string} string The string to test.
+ * @returns {boolean} Whether it has uppercase letters.
  */
-export function hasUppercaseLetters(string: string): boolean {
-  return UPPERCASE_LETTER.test(string);
-}
+export const hasUppercaseLetters = (string: string): boolean => REGEX_UPPERCASE_LETTER.test(string);

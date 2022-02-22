@@ -1,4 +1,13 @@
 /**
+ * This SHA256 implementation was written by Angel Marin and Paul Johnston.
+ * Modified by Pedro Tashima.
+ *
+ * https://gist.github.com/Tashima42/c4b05233491e7bdba6889b6a659bd88e
+ *
+ * Big thanks to them!
+ */
+
+/**
  * Hashes string using sha256
  *
  * @param {string} s String to hash

@@ -24,3 +24,67 @@ h3 {
   align-items: center;
   flex-direction: column;
 }
+
+.slide {
+  animation: slide 12s ease 0s infinite;
+}
+
+.hover-close {
+  animation: hover-close 12s ease 0s infinite;
+}
+
+.hover {
+  animation: hover 1s ease -5s infinite;
+}
+
+.hover-far {
+  animation: hover-far 26s ease 0s infinite;
+}
+
+@keyframes hover-far {
+  0% {
+    transform: translateY(0px);
+  }
+  50% {
+    transform: translateY(-3px);
+  }
+  100% {
+    transform: translateY(0px);
+  }
+}
+
+@keyframes hover {
+  0% {
+    transform: translate(0, 0);
+  }
+  50% {
+    transform: translate(-10px, 3);
+  }
+  100% {
+    transform: translate(0, 0);
+  }
+}
+
+@keyframes hover-close {
+  0% {
+    transform: translateY(0px);
+  }
+  50% {
+    transform: translateY(5px);
+  }
+  100% {
+    transform: translateY(0px);
+  }
+}
+
+@keyframes slide {
+  0% {
+    transform: translateX(0px);
+  }
+  50% {
+    transform: translateX(-10px);
+  }
+  100% {
+    transform: translateX(0px);
+  }
+}

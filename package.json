@@ -8,10 +8,12 @@
     "lint": "eslint \"src/**/*.{d.ts,ts,js,vue}\" --fix"
   },
   "dependencies": {
+    "jsonwebtoken": "^8.5.1",
     "vue": "^2.6.11",
     "vuetify": "^2.4.0"
   },
   "devDependencies": {
+    "@types/jsonwebtoken": "^8.5.8",
     "@types/node": "^15.12.5",
     "@typescript-eslint/eslint-plugin": "^4.18.0",
     "@typescript-eslint/parser": "^4.18.0",

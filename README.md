@@ -9,13 +9,26 @@
 <p align="center">
   <a href="https://vercel.com/andyruwruw/password">Website</a>
   ·
-  <a href="https://github.com/andyruwruw/stardew-valley-water-bot/issues/new/choose">Submit an Issue</a>
+  <a href="https://github.com/andyruwruw/password-encrypter/issues/new/choose">Submit an Issue</a>
 </p>
 
 # Overview
 
-password-encrypter takes a *base*, *secondary*, *integer* and *skull key* to generate a password hashed from a combination of those four parameters. The intent is to store and maintain a different *base*, *secondary*, *integer* for every account and use this app to find the password.
+*password-encrypter* allows users to generate secure passwords utilizing SHA256.
 
-I've been using algorithm generated passwords for a while now, but have always wanted a more secure system that used hashing.
+I wanted a algorithmic way to store and generate my own passwords in a way that maintained security but increased memorability. Storing passwords in plaintext is never a good idea, but maintaining several secrets for each password ensure they'll stay safe.
 
-This website makes no server calls and is all done in browser. It's for personal use but feel free to fork and run your own version. I would not recommend using someone else's instance of this for your own password management. You should understand the code and have complete control over the process.
+Passwords are made from a combination of 4 parameters:
+
+- *Base*
+  - The *base* isn't stored verbatim, but instead a hint for either is stored in a way that only I can figure out their true value.
+- *Home*
+  - The *home* ensures all passwords are encrypted partially based on where they're to.
+- *Number*
+  - The *number* isn't stored verbatim, but instead a hint for either is stored in a way that only I can figure out their true value.
+- *Skeleton Key*
+  - I use a the same *skeleton key* for all my passwords, and have never written it down. It is the one part of this process that should stay completely secret.
+
+This website makes no server calls and is all done in browser. It's for personal use but feel free to fork and run your own version.
+
+I would not recommend using someone else's instance of this for your own password management. You should understand the code and have complete control over the process.

@@ -1,118 +1,87 @@
 <template>
   <div :class="$style.component">
-    <v-text-field
-      v-model="base"
-      color="black"
-      placeholder="Base"
-      prepend-inner-icon="mdi-magnify"
-      autocomplete="off"
-      dense
-      filled
-      rounded />
+    <tab-changer
+      :tab="tab"
+      @changetab="changeTab" />
 
-    <v-text-field
-      v-model="secondary"
-      color="black"
-      placeholder="Home"
-      prepend-inner-icon="mdi-home"
-      autocomplete="off"
-      dense
-      filled
-      rounded />
+    <password-generator-form
+      v-if="tab === 0"
+      @results="setResults" />
 
-    <v-text-field
-      v-model="integer"
-      color="black"
-      placeholder="Number"
-      prepend-inner-icon="mdi-numeric-9-box-multiple-outline"
-      autocomplete="off"
-      dense
-      type="number"
-      filled
-      rounded />
+    <data-decryptor-form
+      v-if="tab === 1"
+      @results="setResults"
+      @error="setError" />
 
-    <v-text-field
-      v-model="key"
-      color="black"
-      placeholder="Skull Key"
-      prepend-inner-icon="mdi-key-variant"
-      autocomplete="off"
-      dense
-      type="password"
-      filled
-      rounded />
+    <data-encryptor-form
+      v-if="tab === 2"
+      @results="setResults" />
 
-    <v-card
-      v-if="result"
-      :class="$style['result-card']"
-      dark
-      outlined>
-      <span>
-        {{ result }}
-      </span>
-
-      <v-btn
-        :color="color"
-        dense
-        outlined
-        @click="copy">
-        Copy
-      </v-btn>
-    </v-card>
+    <results
+      v-if="results || error"
+      :error="error"
+      :text="results" />
   </div>
 </template>
 
 <script lang="ts">
+// Packages
 import Vue from 'vue';
 
-import { encrypt } from '@/helpers/encrypt';
+// Local Imports
+import DataDecryptorForm from './data-decryptor/form.vue';
+import DataEncryptorForm from './data-encryptor/form.vue';
+import PasswordGeneratorForm from './password-generator/form.vue';
+import Results from './shared/results.vue';
+import TabChanger from './shared/tab-changer.vue';
 
 export default Vue.extend({
   name: 'Encryter',
-  data: () => ({
-    base: '',
-    secondary: '',
-    integer: null,
-    key: '',
-    result: '',
-    color: 'white',
-  }),
-  watch: {
-    base() {
-      this.validate();
-    },
-    secondary() {
-      this.validate();
-    },
-    integer() {
-      this.validate();
-    },
-    key() {
-      this.validate();
-    },
+
+  components: {
+    DataDecryptorForm,
+    DataEncryptorForm,
+    PasswordGeneratorForm,
+    Results,
+    TabChanger,
   },
+
+  data: () => ({
+    tab: 0,
+
+    results: '',
+
+    error: false,
+  }),
+
   methods: {
-    validate() {
-      if (this.base && this.secondary && this.integer && this.key) {
-        this.generate();
-      } else {
-        this.result = '';
+    /**
+     * Changes to a new function.
+     */
+    changeTab(direction: number) {
+      this.tab += direction;
+      this.tab %= 3;
+
+      if (this.tab < 0) {
+        this.tab = 3 + this.tab;
       }
+
+      this.error = false;
+      this.results = '';
     },
-    generate() {
-      this.result = encrypt(
-        this.base.toLowerCase(),
-        this.secondary.toLowerCase(),
-        this.integer || 0,
-        this.key,
-      );
+
+    /**
+     * Sets emitted results.
+     */
+    setResults(results: string) {
+      this.results = results;
     },
-    copy() {
-      if (!navigator.clipboard) {
-        return;
-      }
-      navigator.clipboard.writeText(this.result);
-      this.color = 'green';
+
+    /**
+     * Sets emitted results.
+     */
+    setError(state: boolean) {
+      this.error = state;
     },
   },
 });
@@ -120,22 +89,6 @@ export default Vue.extend({
 
 <style lang="scss" module>
 .component {
-  width: calc(100vw - 4rem);
-  max-width: 600px;
   padding-bottom: 10rem;
-}
-
-.result-card {
-  align-items: center;
-  margin-top: 2rem;
-  padding: 1rem;
-  display: flex;
-  justify-content: space-between;
-
-  span {
-    color: rgb(255, 255, 255);
-    font-weight: 500;
-    letter-spacing: .05rem;
-  }
 }
 </style>
